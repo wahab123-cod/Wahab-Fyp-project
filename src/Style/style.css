@@ -1,0 +1,63 @@
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+.textColor {
+  color: #030F27;
+}
+
+.navbarBgDark {
+  background:rgba(0, 0, 0, 0.895);
+}
+
+.sideLine {
+  border-right: 1px solid #f7f7f8;
+}
+
+.navbar-nav {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  
+}
+
+.nav-item {
+  margin-right: 100px; 
+  text-decoration: none;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #fff; 
+  padding: 10px; 
+  border-radius: 5px; 
+ 
+}
+
+.nav-link:hover {
+  background-color:burlywood ; 
+}
+li
+{
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+ul
+{
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.nav-item span {
+  display: flex;
+
+}
+.red-dot {
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%; /* Ensures the dot is circular */
+  display: inline-block; /* Makes it a block-level element so width and height are respected */
+}

@@ -1,0 +1,37 @@
+.searchbar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    padding: 20px;
+  
+  }
+  
+  .search-input {
+    width: 50%; /* Or fixed width e.g., 300px */
+    padding: 10px;
+    margin-bottom: 10px; /* Space between input and results */
+    box-sizing: border-box;
+    border-radius: 49px;
+  }
+  
+  .search-results {
+    width: 50%; /* Align width with the search input */
+    background: #f1f1f1; /* Light grey background for visibility */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Soft shadow for depth */
+    border-radius: 4px; /* Rounded corners */
+    padding: 10px;
+    max-height: 300px; /* Optional: Limit height and make scrollable */
+    overflow-y: auto; /* Scrollable results */
+  }
+  
+  .search-result {
+    padding: 8px;
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+  }
+  
+  .search-result:hover {
+    background-color: #ddd; 
+  }
+  

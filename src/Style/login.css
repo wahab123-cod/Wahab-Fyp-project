@@ -1,0 +1,46 @@
+.login-body3 {
+  display: grid;
+  height: 100vh;
+  place-items: center;
+}
+
+.login-main_div {
+  width: 365px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+.login-form .login-input_box {
+  height: 50px;
+  width: 100%;
+  position: relative;
+  margin-top: 15px;
+}
+
+.login-input_box input {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+  padding-left: 45px;
+  font-size: 17px;
+  transition: all 0.3s ease;
+}
+
+.login-button input {
+  padding-left: 0;
+  background: #be2edd;
+  color: #fff;
+  border: none;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s linear;
+}
+
+.login-button input:hover {
+  background: #a720c5;
+}

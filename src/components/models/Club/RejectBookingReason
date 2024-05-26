@@ -1,0 +1,39 @@
+import React, { useState } from "react";
+import axios from "axios";
+
+const RejectBookingReason = ({ bookingId, onClose, refreshBookings }) => {
+  const [rejectReason, setRejectReason] = useState("");
+
+  const submitRejectReason = async () => {
+    try {
+      await axios.patch(`http://localhost:3001/bookings/${bookingId}`, {
+        rejectReason: rejectReason,
+        rejected: true // Mark booking as rejected
+      });
+      refreshBookings(); // Refresh bookings list after update
+      onClose(); // Close the rejection reason component
+    } catch (error) {
+      console.error("Failed to update booking with reject reason:", error);
+    }
+  };
+
+  return (
+    <div className="reject-reason-modal">
+      <div className="reject-reason-modal-content">
+        <span className="close" onClick={onClose}>
+          &times;
+        </span>
+        <h2>Provide Reason for Rejection</h2>
+        <textarea
+          rows="4"
+          cols="50"
+          value={rejectReason}
+          onChange={(e) => setRejectReason(e.target.value)}
+        />
+        <button onClick={submitRejectReason}>Submit Reason</button>
+      </div>
+    </div>
+  );
+};
+
+export default RejectBookingReason;
