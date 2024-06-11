@@ -14,7 +14,7 @@ const Ourclubs = () => {
   const [clubs, setClubs] = useState([]);
   const [filteredClubs, setFilteredClubs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [lowestPrice, setLowestPrice] = useState(0);
+  const [lowestPrice, setLowestPrice] = useState("");
   useEffect(() => {
     fetchClubs();
   }, []);
@@ -29,9 +29,10 @@ const Ourclubs = () => {
   useEffect(() => {
     // Filter the clubs array based on the search term and lowest price
     const filtered = clubs.filter(club =>
-      (club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (
+        // club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       club.address.toLowerCase().includes(searchTerm.toLowerCase())) &&
-      (lowestPrice === 0 || club.price <= lowestPrice)
+      (lowestPrice === 0 || lowestPrice === "" || club.price <= lowestPrice)
     );
     // Set the filtered clubs state
     setFilteredClubs(filtered);
@@ -43,12 +44,12 @@ const Ourclubs = () => {
     setSearchTerm(e.target.value);
   };
   const handlePriceChange = (e) => {
-    const price = e.target.value === '' ? 0 : parseInt(e.target.value, 10);
+    const price = e.target.value;
     setLowestPrice(price);
   };
   return (
     <div className="">
-      <h1>Book a Sport Session</h1>
+  
       <div className="container">
         <div className="row">
           <h1 style={{ textAlign: "center", fontWeight: "bold" }}>
@@ -57,12 +58,12 @@ const Ourclubs = () => {
           </h1>
         </div>
         
-      <div style={{width:"20rem"}}>
+      <div style={{width:"24rem"}}>
       <Row>
         <Col>
             <FormControl
               type="text"
-              placeholder="Search by name or location"
+              placeholder="Search by location"
               value={searchTerm}
               onChange={handleSearch}
             />
@@ -71,7 +72,7 @@ const Ourclubs = () => {
             <FormControl
               type="number"
               placeholder="Lowest price"
-              value={lowestPrice ?? 0}
+              value={lowestPrice}
               onChange={handlePriceChange}
             />
         </Col>

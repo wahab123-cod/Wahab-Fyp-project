@@ -26,6 +26,7 @@ import Ownerlogin from './Pages/Ownerlogin';
 import Ownerpage from './Pages/Ownerpage';
 import Orders from './Pages/Orders';
 import UserBookings from './Pages/UserBookings';
+import Profile from './Pages/Profile';
 
 function App() {
   const [hasRejectedBookings, setHasRejectedBookings] = useState(false);
@@ -59,6 +60,7 @@ function App() {
             <Route path="/orders" element={<Orders />} />
             <Route path="/info" element={<Info />} />
             <Route path="/product/:id" element={<Product />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </div>
         <br />

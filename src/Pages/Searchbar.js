@@ -35,8 +35,6 @@ const Searchbar = () => {
     setShowSearchResults(false);
   };
 
-
-
   const filteredLocations = locations.filter(location =>
     location.name.toLowerCase().includes(searchQuery.toLowerCase())
   );

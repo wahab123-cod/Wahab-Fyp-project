@@ -54,7 +54,7 @@ const Register = () => {
       setPhoneNumberError(true);
       return;
     }
-    axios.post('http://localhost:3001/register', { name, email, password, phoneNumber, gender })
+    axios.post('http://localhost:3001/register', { name, email, password,confirmPassword, phoneNumber, gender })
       .then((response) => {
         console.log(response);
         setClear(true);

@@ -7,6 +7,7 @@ import bell from "../images/bell_1-removebg-preview.png";
 
 const Navbar = () => {
   const username = localStorage.getItem("username");
+  const profileImage = localStorage.getItem("profileImage");
   const navigate = useNavigate();
   const [hasRejectedBookings, setHasRejectedBookings] = useState(false);
 
@@ -55,7 +56,11 @@ const Navbar = () => {
         position: "relative",
       }}
     >
-      {children.charAt(0)}
+      {profileImage ? (
+        <img src={`http://localhost:3001/${profileImage}`} alt="Profile" style={{ width: "100%", height: "100%", borderRadius: "50%" }} />
+      ) : (
+        children.charAt(0)
+      )}
     </div>
   ));
 
@@ -156,7 +161,7 @@ const Navbar = () => {
             <li className="nav-item">
               <Link
                 className="nav-link"
-                to="/aboutus"
+                to="/abooutus"
                 style={{
                   color: "#fff",
                   fontSize: "1.5rem",
@@ -209,7 +214,7 @@ const Navbar = () => {
                     style={{
                       fontSize: "7px",
                       marginLeft: "65px",
-                      
+                      marginTop: "10px",
                       display: hasRejectedBookings ? "inline" : "none",
                       transform: "translate(-50%, -50%)",
                       color: "red",
@@ -233,7 +238,6 @@ const Navbar = () => {
                   >
                     {username}
                   </Dropdown.Toggle>
-
                   <Dropdown.Menu>
                     <Dropdown.Item onClick={() => navigate("/profile")} style={{ color: "#000" }}>
                       Profile

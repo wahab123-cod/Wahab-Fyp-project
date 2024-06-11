@@ -9,18 +9,22 @@ function AddProduct({ show, setShow, setRefresh, refresh }) {
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
-  const [buyer,setBuyer] = useState("")
-  const [location, setlocation] = useState("");
-  const [image, setImage] = useState(null);
-  function handleAddClub() {
+  const [buyer, setBuyer] = useState("");
+  const [location, setLocation] = useState("");
+   const [image, setImage] = useState(null);
+
+  function handleAddProduct() {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("price", price);
     formData.append("buyer", buyer);
     formData.append("location", location);
+  if (image) {
+       formData.append("image", image);
+    } 
 
     axios
-      .post("http://localhost:3001/clubs", formData, {
+      .post("http://localhost:3001/product", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -30,22 +34,23 @@ function AddProduct({ show, setShow, setRefresh, refresh }) {
         setName("");
         setPrice(0);
         setBuyer("");
-        setlocation("");
+        setLocation("");
         setImage(null);
-        setRefresh(!refresh);
         setShow(false);
+        setRefresh(!refresh);
+        alert("Your product was added successfully");
       })
       .catch((err) => {
         console.log(err);
-        setError(err.response?.data.message);
+        setError(err.response?.data.message || "An error occurred");
       });
   }
+
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Club</Modal.Title>
+        <Modal.Title>Add Product</Modal.Title>
       </Modal.Header>
-
       <Modal.Body>
         {error !== "" && (
           <Alert variant="danger" onClose={() => setError("")} dismissible>
@@ -61,12 +66,12 @@ function AddProduct({ show, setShow, setRefresh, refresh }) {
               type="text"
               placeholder="Name"
               value={name}
-              name={name}
               onChange={(e) => setName(e.target.value)}
+              required
             />
           </Col>
         </Form.Group>
-        <Form.Group as={Row} className="mb-3" controlId="formPlaintextAddress">
+        <Form.Group as={Row} className="mb-3" controlId="formPlaintextPrice">
           <Form.Label column sm="2">
             Price
           </Form.Label>
@@ -75,12 +80,12 @@ function AddProduct({ show, setShow, setRefresh, refresh }) {
               type="number"
               placeholder="Price"
               value={price}
-              name={price}
               onChange={(e) => setPrice(e.target.value)}
+              required
             />
           </Col>
         </Form.Group>
-        <Form.Group as={Row} className="mb-3" controlId="formPlaintextAddress">
+        <Form.Group as={Row} className="mb-3" controlId="formPlaintextBuyer">
           <Form.Label column sm="2">
             Buyer
           </Form.Label>
@@ -89,26 +94,26 @@ function AddProduct({ show, setShow, setRefresh, refresh }) {
               type="text"
               placeholder="Buyer"
               value={buyer}
-              name={buyer}
-              onChange={(e) => setPrice(e.target.value)}
+              onChange={(e) => setBuyer(e.target.value)}
+              required
             />
           </Col>
         </Form.Group>
-        <Form.Group as={Row} className="mb-3" controlId="formPlaintextAddress">
+        <Form.Group as={Row} className="mb-3" controlId="formPlaintextLocation">
           <Form.Label column sm="2">
-            Price
+            Stock
           </Form.Label>
           <Col sm="10">
             <Form.Control
-              type="number"
-              placeholder="Address"
-              value={price}
-              name={price}
-              onChange={(e) => setPrice(e.target.value)}
+              type="Number"
+              placeholder="Stock"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              required
             />
           </Col>
         </Form.Group>
-        <Form.Group as={Row} className="mb-3" controlId="formPlaintextAddress">
+        <Form.Group as={Row} className="mb-3" controlId="formPlaintextImage">
           <Form.Label column sm="2">
             Image
           </Form.Label>
@@ -119,8 +124,8 @@ function AddProduct({ show, setShow, setRefresh, refresh }) {
             />
           </Col>
         </Form.Group>
-        <Button className="btn btn-success" onClick={() => handleAddClub()}>
-          Add Club
+        <Button className="btn btn-success" onClick={handleAddProduct}>
+          Add Product
         </Button>
       </Modal.Body>
     </Modal>

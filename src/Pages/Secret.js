@@ -10,26 +10,29 @@ import AddEvent from "../components/models/Event/AddEvent";
 import EditEvent from "../components/models/Event/EditEvent";
 import DeleteEvent from "../components/models/Event/DeleteEvent";
 import BookingEditModel from "../components/models/Booking/BookingEditModel";
+import AddClub from "../components/models/Club/AddClub";
+
 const Secret = () => {
   const [bookings, setBookings] = useState([]);
-  const [bookingId,setBookingId] = useState("");
+  const [bookingId, setBookingId] = useState("");
   const [contacts, setContacts] = useState([]);
   const [previousStatus, setPreviousStatus] = useState("");
   const [clubs, setClubs] = useState([]);
   const [users, setUsers] = useState([]);
   const [product, setProduct] = useState([]);
-  const [refresh, setRefresh] = useState(false);
   const [showAPM, setShowAPM] = useState(false);
   const [showEPM, setShowEPM] = useState(false);
   const [showEBM, setShowEBM] = useState(false);
   const [showDPM, setShowDPM] = useState(false);
   const [productId, setProductId] = useState("");
-  const [showAddModel, setShowAddModel] = useState(false);
+
   const [previousAddress, setPreviousAddress] = useState("");
   const [previousName, setPreviousName] = useState("");
   const [showDeleteModel, setShowDeleteModel] = useState(false);
   const [showEditModel, setShowEditModel] = useState(false);
   const [clubId, setClubId] = useState("");
+  const [showAddModel, setShowAddModel] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [updatedData, setUpdatedData] = useState({
     name: "",
     location: "",
@@ -217,6 +220,13 @@ const Secret = () => {
 
   return (
     <div className="admin-panel">
+      <AddProduct
+        show={showAddModel}
+        setShow={setShowAddModel}
+        refresh={refresh}
+        setRefresh={setRefresh}
+      />
+     
       <aside className="sidebar">
         <nav>
           <ul>
@@ -228,12 +238,24 @@ const Secret = () => {
             </li>
             <li>
               <Link to="/rules">Logout</Link>
+
             </li>
           </ul>
         </nav>
       </aside>
       <div className="main-content">
         <h2>Welcome to the Admin Panel</h2>
+        <div className="contact-list">
+        <div className="d-flex justify-content-between m-3">
+          <button
+            className="btn btn-dark mx-3"
+            style={{ width: "10rem" }}
+            onClick={() => setShowAddModel(true)}
+          >
+            Add Product
+          </button>
+        </div>
+      </div>
         <div className="booking-list">
           {/*  <form onSubmit={handleBookingSubmit}>
             <input type="text" name="name" placeholder="Name" value={updatedData.name} onChange={handleInputChange} />

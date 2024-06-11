@@ -276,48 +276,12 @@ const Booking = () => {
                   placeholder="Name"
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="date">Date:</label>
-                <input
-                  type="date"
-                  value={selectedDate || new Date().toISOString().split("T")[0]}
-                  min={new Date().toISOString().split("T")[0]}
-                  onChange={handleDateChange}
-                  required
-                />
-              </div>
+             
               <SlotList
                 selectedSlots={selectedSlots}
                 setSelectedSlots={setSelectedSlots}
               />
-              {/* <div className="form-group">
-                <label htmlFor="time-slot">Time Slot:</label>
-                <select
-                  id="time-slot"
-                  value={selectedTimeSlot}
-                  onChange={handleTimeSlotChange}
-                  required
-                >
-                  <option value="">Select a time slot</option>
-                  <option value="Morning">Morning</option>
-                  <option value="Afternoon">Afternoon</option>
-                  <option value="Evening">Evening</option>
-                </select>
-              </div> */}
-              {/* <div className="form-group">
-                <label htmlFor="duration">Duration:</label>
-                <select
-                  id="duration"
-                  value={selectedDuration}
-                  onChange={handleDurationChange}
-                  required
-                >
-                  <option value={1}>1 hour</option>
-                  <option value={2}>2 hours</option>
-                  <option value={3}>3 hours</option>
-                </select>
-              </div> */}
-              <p>Total price is: {price}</p>
+             
               <div className="roduct-inner">
               <button>
                 Book Now

@@ -20,11 +20,11 @@ const Product = () => {
   const products = [
     {
       id: "1",
-      name: "Bet",
+      name: "Bat",
       pricee:2000,
       price: 1500,
       detail:
-        "Cricket Bet: A reliable choice for cricket enthusiasts, offering enhanced grip and control during gameplay.",
+        "Cricket Bat: A reliable choice for cricket enthusiasts, offering enhanced grip and control during gameplay.",
       image: b1,
     },
     {
@@ -33,16 +33,16 @@ const Product = () => {
       pricess:900,
       price: 500,
       detail:
-        "Comfortable Fit: Bet Gloves offer a snug and comfortable fit, ensuring optimal performance during sports activities.",
+        "Comfortable Fit: bat Gloves offer a snug and comfortable fit, ensuring optimal performance during sports activities.",
       image: s1,
     },
     {
       id: "3",
-      name: "Bet",
+      name: "bat",
       pricess:1200,
       price: 1000,
       detail:
-        "Cricket Bet: A reliable choice for cricket enthusiasts, offering enhanced grip and control during gameplay.",
+        "Cricket bat: A reliable choice for cricket enthusiasts, offering enhanced grip and control during gameplay.",
       image: b2,
     },
     {
@@ -202,14 +202,14 @@ const Product = () => {
           </div>
 
           <div className="col">
-          <h3 style={{color:""}}> Delivery</h3>
-          <ul>
-            <li> Starting Delivery from Lahore</li><br></br>
-            <li> Ship from Overseas</li><br></br>
-            <li> Only cash on Delivery</li><br></br>
-            <li> Services 14 days Free and Easy return </li> <br></br>
-            <li>Warranty not available</li><br></br>
-            </ul>
+          <h3 style={{color:"red"}}> Delivery</h3><br></br>
+          <h4>
+            <h4> Starting Delivery from Lahore</h4>
+            <h4> Ship from Overseas</h4>
+            <h4> Only cash on Delivery</h4>
+            <h4> Services 14 days Free and Easy return </h4> 
+            <h4>Warranty not available</h4>
+            </h4>
             <h3> sold by : Sports World</h3>
           </div>
           <div>

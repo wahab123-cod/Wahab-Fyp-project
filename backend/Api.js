@@ -5,13 +5,13 @@ const cors = require("cors");
 const Employeemodel = require("./models/Employee");
 const Booking = require("./models/Booking");
 const Contact = require("./models/Contct");
-const Product = require("./models/Products");
 const owner = require("./models/Owner");
 const Order = require("./models/Orders");
 const Event = require('./models/Event')
+const ProductModel = require("./models/Products");
 const fs = require("fs");
 const path = require('path');
-
+const bcrypt = require('bcrypt');
 const Club = require("./models/Club");
 const app = express();
 const PORT = 3001;
@@ -22,7 +22,6 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const uploadDir = path.join(__dirname, "uploads");
-
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
@@ -38,24 +37,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.use(bodyParser.json());
-app.use(cors());
+// Serve uploaded images statically
 app.use("/uploads", express.static(uploadDir));
 
-const usersFile = path.join(__dirname, "users.json");
-
-const readUsers = () => {
-  if (fs.existsSync(usersFile)) {
-    const data = fs.readFileSync(usersFile);
-    return JSON.parse(data);
-  }
-  return [];
-};
-
-const writeUsers = (users) => {
-  fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
-};
-
+// Endpoint to handle profile image upload
 app.post("/upload", upload.single("profileImage"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No file uploaded" });
@@ -63,37 +48,31 @@ app.post("/upload", upload.single("profileImage"), (req, res) => {
   res.json({ filePath: `uploads/${req.file.filename}` });
 });
 
-app.post("/updateProfile", (req, res) => {
-  const { username, profileImage } = req.body;
-  if (!username || !profileImage) {
-    return res.status(400).json({ message: "Username and profile image are required" });
-  }
+app.put("/updateProfile", async (req, res) => {
+  const { id, newName, newEmail, newPhone } = req.body;
 
-  const users = readUsers();
-  const userIndex = users.findIndex((user) => user.username === username);
+  try {
+    let updatedFields = {};
+    if (newName) updatedFields.name = newName;
+    if (newEmail) updatedFields.email = newEmail;
+    if (newPhone) updatedFields.phone = newPhone;
 
-  if (userIndex !== -1) {
-    users[userIndex].profileImage = profileImage;
-  } else {
-    users.push({ username, profileImage });
-  }
+    const updatedUser = await Employeemodel.findByIdAndUpdate(
+      id,
+      updatedFields,
+      { new: true }
+    );
 
-  writeUsers(users);
-  res.json({ message: "Profile updated successfully" });
-});
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-app.get("/profile/:username", (req, res) => {
-  const { username } = req.params;
-  const users = readUsers();
-  const user = users.find((user) => user.username === username);
-
-  if (user) {
-    res.json(user);
-  } else {
-    res.status(404).json({ message: "User not found" });
+    res.json({ message: "Profile updated successfully", user: updatedUser });
+  } catch (error) {
+    console.error("Failed to update profile:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 //contact
 app.post("/contact", (req, res) => {
@@ -249,20 +228,29 @@ app.delete("/bookings/:id", async (req, res) => {
   }
 });
 
-//product
-app.post("/product", async (req, res) => {
+
+
+app.post("/product/buy/:id", async (req, res) => {
   try {
-    const { name, price, Buyer, Location } = req.body;
-    const prod = new Product({ name, price, Buyer, Location });
-    await prod.save();
-    return res.status(200).json({ message: "Your order Place successful!" });
+    const productId = req.params.id;
+    const product = await ProductModel.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    product.purchased = true; // Mark product as purchased
+    await product.save();
+
+    return res.status(200).json({ message: "Product purchased successfully!" });
   } catch (error) {
-    console.error("failed to buy ");
+    console.error("Failed to purchase product:", error);
+    return res.status(500).json({ message: "Failed to purchase product" });
   }
 });
+
 app.get("/infoP", async (req, res) => {
   try {
-    const dis = await Product.find();
+    const dis = await ProductModel.find();
     res.json(dis);
   } catch (error) {
     console.error("faild to fetch", error);
@@ -521,6 +509,37 @@ app.post("/ownerlogin", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+app.put("/updatePassword", async (req, res) => {
+  const { id, oldPassword, newPassword } = req.body;
+
+  try {
+    // Find user by ID
+    const user = await Employeemodel.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Verify old password
+    const passwordMatch = await bcrypt.compare(oldPassword, user.password);
+
+    if (!passwordMatch) {
+      return res.status(400).json({ message: "Incorrect old password" });
+    }
+
+    // Hash and update new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    // Respond with success message
+    res.json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error("Error updating password:", error); // Log the error for debugging
+    res.status(500).json({ message: "Failed to update password. Please try again." });
+  }
+});
+
 
 //port
 app.listen(PORT, () => {

@@ -78,7 +78,7 @@ const Ownerpage = () => {
     // Filter the clubs array based on the search term
     const filtered = clubs.filter(
       (club) =>
-        club?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        // club?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         club?.address?.toLowerCase().includes(searchTerm.toLowerCase())
     );
     // Set the filtered clubs state
@@ -170,12 +170,12 @@ const Ownerpage = () => {
                       : "not approved yet"}
                   </td>
                   <td>
-                    <button
+                    {/* <button
                       className="me-2"
                       onClick={() => handleDeleteBooking(booking._id)}
                     >
                       Delete
-                    </button>
+                    </button> */}
                     <button
                       onClick={() => {
                         setPreviousStatus(
@@ -279,7 +279,7 @@ const Ownerpage = () => {
               <FormControl
                 type="text"
                 className="mx-2"
-                placeholder="Search by name or location"
+                placeholder="Search by location"
                 value={searchTerm}
                 onChange={handleSearch}
               />
