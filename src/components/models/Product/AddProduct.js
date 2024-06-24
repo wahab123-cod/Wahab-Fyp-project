@@ -11,7 +11,7 @@ function AddProduct({ show, setShow, setRefresh, refresh }) {
   const [price, setPrice] = useState(0);
   const [buyer, setBuyer] = useState("");
   const [location, setLocation] = useState("");
-   const [image, setImage] = useState(null);
+  const [image, setImage] = useState(null);
 
   function handleAddProduct() {
     const formData = new FormData();
@@ -19,9 +19,8 @@ function AddProduct({ show, setShow, setRefresh, refresh }) {
     formData.append("price", price);
     formData.append("buyer", buyer);
     formData.append("location", location);
-  if (image) {
-       formData.append("image", image);
-    } 
+    formData.append("image", image);
+    
 
     axios
       .post("http://localhost:3001/product", formData, {
@@ -87,12 +86,12 @@ function AddProduct({ show, setShow, setRefresh, refresh }) {
         </Form.Group>
         <Form.Group as={Row} className="mb-3" controlId="formPlaintextBuyer">
           <Form.Label column sm="2">
-            Buyer
+            Seller Name
           </Form.Label>
           <Col sm="10">
             <Form.Control
               type="text"
-              placeholder="Buyer"
+              placeholder="Seller"
               value={buyer}
               onChange={(e) => setBuyer(e.target.value)}
               required
@@ -113,7 +112,7 @@ function AddProduct({ show, setShow, setRefresh, refresh }) {
             />
           </Col>
         </Form.Group>
-        <Form.Group as={Row} className="mb-3" controlId="formPlaintextImage">
+        <Form.Group as={Row} className="mb-3" controlId="formPlaintextAddress">
           <Form.Label column sm="2">
             Image
           </Form.Label>

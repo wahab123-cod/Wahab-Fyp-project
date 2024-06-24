@@ -5,9 +5,12 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 function EditProduct({
-  clubId,
+  productId,
   previousName,
-  previousAddress,
+  previousPrice,
+  previousBuyer,
+  previousLocation,
+  previousImage,
   show,
   setShow,
   setRefresh,
@@ -15,33 +18,44 @@ function EditProduct({
 }) {
   const handleClose = () => setShow(false);
   const [error, setError] = useState("");
-  const [name, setName] = useState();
-  const [address, setAddress] = useState();
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [buyer, setBuyer] = useState("");
+  const [location, setLocation] = useState("");
+  const [image, setImage] = useState("");
   const [id, setId] = useState("");
-  const handleUpdateClub = async () => {
+
+  const handleUpdateProduct = async () => {
     try {
-      await axios.put(`http://localhost:3001/club/${id}`, {
+      await axios.put(`http://localhost:3001/productU/${id}`, {
         name,
-        address,
+        price,
+        buyer,
+        location,
+        image,
       });
-      setShow(false)
+      setShow(false);
       setRefresh(!refresh);
     } catch (err) {
-      console.error("Failed to update club:", err);
+      console.error("Failed to update product:", err);
       setError(err.response?.data.message);
     }
   };
+
   useEffect(() => {
-    setAddress(previousAddress);
     setName(previousName);
-    setId(clubId);
-  }, [previousName, previousAddress, clubId]);
+    setPrice(previousPrice);
+    setBuyer(previousBuyer);
+    setLocation(previousLocation);
+    setImage(previousImage);
+    setId(productId);
+  }, [previousName, previousPrice, previousBuyer, previousLocation, previousImage, productId]);
+
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Edit Club</Modal.Title>
+        <Modal.Title>Edit Product</Modal.Title>
       </Modal.Header>
-
       <Modal.Body>
         {error !== "" && (
           <Alert variant="danger" onClose={() => setError("")} dismissible>
@@ -57,27 +71,64 @@ function EditProduct({
               type="text"
               placeholder="Name"
               value={name}
-              name={name}
               onChange={(e) => setName(e.target.value)}
             />
           </Col>
         </Form.Group>
-        <Form.Group as={Row} className="mb-3" controlId="formPlaintextAddress">
+        <Form.Group as={Row} className="mb-3" controlId="formPlaintextPrice">
           <Form.Label column sm="2">
-            Address
+            Price
+          </Form.Label>
+          <Col sm="10">
+            <Form.Control
+              type="number"
+              placeholder="Price"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="mb-3" controlId="formPlaintextBuyer">
+          <Form.Label column sm="2">
+            Buyer
           </Form.Label>
           <Col sm="10">
             <Form.Control
               type="text"
-              placeholder="Address"
-              value={address}
-              name={address}
-              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Buyer"
+              value={buyer}
+              onChange={(e) => setBuyer(e.target.value)}
             />
           </Col>
         </Form.Group>
-        <Button className="btn btn-success" onClick={() => handleUpdateClub()}>
-          Edit Club
+        <Form.Group as={Row} className="mb-3" controlId="formPlaintextLocation">
+          <Form.Label column sm="2">
+            Location
+          </Form.Label>
+          <Col sm="10">
+            <Form.Control
+              type="text"
+              placeholder="Location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="mb-3" controlId="formPlaintextImage">
+          <Form.Label column sm="2">
+            Image
+          </Form.Label>
+          <Col sm="10">
+            <Form.Control
+              type="text"
+              placeholder="Image (Base64)"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+            />
+          </Col>
+        </Form.Group>
+        <Button className="btn btn-success" onClick={handleUpdateProduct}>
+          Edit Product
         </Button>
       </Modal.Body>
     </Modal>

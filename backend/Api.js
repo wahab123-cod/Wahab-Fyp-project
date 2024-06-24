@@ -13,13 +13,35 @@ const fs = require("fs");
 const path = require('path');
 const bcrypt = require('bcrypt');
 const Club = require("./models/Club");
+var session = require('express-session')
+const cookieParser = require("cookie-parser");
+const MongoStore = require("connect-mongo");
 const app = express();
 const PORT = 3001;
-const multer = require("multer");
-mongoose.connect("mongodb://localhost:27017/employee");
 
+const multer = require("multer");
+
+const { request } = require("http");
+mongoose.connect("mongodb://localhost:27017/employee");
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(cors());
+app.set('trust proxy', 1) // trust first proxy
+app.use(
+  session({
+    secret: "wahab", // Change this to a strong, unique secret
+    resave: true, // Don't save the session if it wasn't modified
+    saveUninitialized: true, // Don't create a session until something is stored
+    store: MongoStore.create({
+      mongoUrl: "mongodb://localhost:27017/employee", // Replace with your MongoDB connection string
+      collectionName: "sessions"
+    }),
+    cookie: {
+      secure: true, // Set to true if using HTTPS
+      maxAge: 1000 * 60 * 60 * 24 // Session expiration time (24 hours)
+    }
+  })
+);
 
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) {
@@ -53,6 +75,7 @@ app.put("/updateProfile", async (req, res) => {
 
   try {
     let updatedFields = {};
+    console.log("Request body", req.body )
     if (newName) updatedFields.name = newName;
     if (newEmail) updatedFields.email = newEmail;
     if (newPhone) updatedFields.phone = newPhone;
@@ -124,6 +147,11 @@ app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await Employeemodel.findOne({ email: email });
+    console.log("User is", user)
+    req.session.email = user.email;
+    req.session.save();
+    console.log("User is", req.session.email)
+
     if (user) {
       if (user.password === password) {
         return res.json({ message: "Success", username: user.name });
@@ -164,8 +192,9 @@ app.post("/book", async (req, res) => {
     if (checked) {
       return res
         .status(400)
-        .json({ message: "Slot already booked. Please choose another time." });
+        .json({ message: "Slot already booked. Please choose another time." });  
     }
+    
     const newBooking = new Booking({
       location,
       date,
@@ -228,23 +257,29 @@ app.delete("/bookings/:id", async (req, res) => {
   }
 });
 
-
-
-app.post("/product/buy/:id", async (req, res) => {
+app.post("/product", upload.single('image'), async (req, res) => {
   try {
-    const productId = req.params.id;
-    const product = await ProductModel.findById(productId);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+    const { name, price, buyer, location } = req.body;
+    const image = req.file ? req.file.path : null;
+
+    // Validate required fields
+    if (!name || !price || !buyer || !location) {
+      return res.status(400).json({ message: "All fields are required" });
     }
 
-    product.purchased = true; // Mark product as purchased
-    await product.save();
+    const newProduct = new ProductModel({
+      name,
+      price,
+      buyer,
+      location,
+      image
+    });
 
-    return res.status(200).json({ message: "Product purchased successfully!" });
+    await newProduct.save();
+    return res.status(201).json({ message: "Product added successfully" });
   } catch (error) {
-    console.error("Failed to purchase product:", error);
-    return res.status(500).json({ message: "Failed to purchase product" });
+    console.error("Failed to add product:", error);
+    return res.status(500).json({ message: "Failed to add product" });
   }
 });
 
@@ -256,38 +291,68 @@ app.get("/infoP", async (req, res) => {
     console.error("faild to fetch", error);
   }
 });
-app.put("/productU/:id", async (req, res) => {
-  const { id } = req.params;
-  const { name, price, Buyer, Location } = req.body;
+app.get("/infoP/:id", async (req, res) => {
+  const productId = req.params.id;
   try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      id,
-      { name, price, Buyer, Location },
-      { new: true }
-    );
-    if (!updatedProduct) {
+    const product = await ProductModel.findById(productId);
+    if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-    res.json(updatedProduct);
+    res.json(product);
   } catch (error) {
-    console.error("Failed to update product:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Failed to fetch product:", error);
+    res.status(500).json({ message: "Failed to fetch product" });
   }
 });
-app.delete("/productd/:id", async (req, res) => {
+
+
+
+// Update Product
+app.put('/productU/:id', async (req, res) => {
   const { id } = req.params;
+  const { name, price, buyer, location, image } = req.body;
+
   try {
-    await Product.findByIdAndDelete(id);
-    res.json({
-      messag: "Product deleted successfully",
-    });
+    const product = await ProductModel.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    product.name = name || product.name;
+    product.price = price || product.price;
+    product.buyer = buyer || product.buyer;
+    product.location = location || product.location;
+    product.image = image || product.image;
+
+    await product.save();
+    res.status(200).json({ message: 'Product updated successfully', product });
   } catch (error) {
-    console.error("Failed to delete booking:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: 'Failed to update product', error });
   }
 });
+
+
+
+
+app.delete("/product/:id", async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await ProductModel.findByIdAndDelete(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    return res.status(200).json({ message: "Product deleted successfully!" });
+  } catch (error) {
+    console.error("Failed to delete product:", error);
+    return res.status(500).json({ message: "Failed to delete product" });
+  }
+});
+
 app.get("/show", async (req, res) => {
   try {
+    const user = req.session.email
+    console.log("Üser is", user)
+
     const show = await Employeemodel.find();
     res.json(show);
   } catch (error) {
@@ -373,9 +438,13 @@ app.get("/orders", async (req, res) => {
 
 app.post("/orders", upload.single("image"), async (req, res) => {
   const { buyerName, location, productName, price, quantity, total } = req.body;
-  const fileContent = fs.readFileSync(req.file.path);
-  const image = fileContent.toString("base64");
   try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+    const fileContent = fs.readFileSync(req.file.path);
+    const image = fileContent.toString("base64");
+
     const newOrder = await Order.create({
       buyerName,
       location,
@@ -385,10 +454,15 @@ app.post("/orders", upload.single("image"), async (req, res) => {
       total,
       image,
     });
-    res.json({"message":"Order Created Successfully!"});
+    res.json({ message: "Order Created Successfully!" });
   } catch (error) {
     console.error("Failed to add order:", error);
     res.status(500).json({ message: "Internal server error" });
+  } finally {
+    // Clean up the uploaded file
+    fs.unlink(req.file.path, (err) => {
+      if (err) console.error("Failed to delete temporary file:", err);
+    });
   }
 });
 
@@ -474,8 +548,6 @@ app.delete("/event/:id", async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-
 //owner
 app.post("/owner", async (req, res) => {
   const { name, email, password } = req.body;

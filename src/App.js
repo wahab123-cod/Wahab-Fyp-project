@@ -34,7 +34,6 @@ function App() {
   return (
     <div>
       <BrowserRouter>
-        <Navbar hasRejectedBookings={hasRejectedBookings} />
         <div className="container-fluid">
           <Routes>
             <Route path="/rules" element={<Rules />}>
@@ -64,7 +63,7 @@ function App() {
           </Routes>
         </div>
         <br />
-        <Footer />
+    
       </BrowserRouter>
     </div>
   );

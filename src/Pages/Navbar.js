@@ -12,20 +12,17 @@ const Navbar = () => {
   const [hasRejectedBookings, setHasRejectedBookings] = useState(false);
 
   useEffect(() => {
-    // Fetch initial value of hasRejectedBookings from localStorage
     const initialRejectedStatus = localStorage.getItem("hasRejectedBookings");
     if (initialRejectedStatus) {
       setHasRejectedBookings(JSON.parse(initialRejectedStatus));
     }
-  }, []); // Run once on component mount to initialize state from localStorage
+  }, []);
 
   useEffect(() => {
-    // Check if username is available in local storage
     if (username) {
-      // Fetch bookings when username is available
       fetchBookings();
     }
-  }, [username]); // Dependency on username changes
+  }, [username]);
 
   const fetchBookings = async () => {
     try {
@@ -33,7 +30,6 @@ const Navbar = () => {
       const rejectedBookings = response.data.filter((booking) => booking.rejected);
       const hasRejected = rejectedBookings.length > 0;
       setHasRejectedBookings(hasRejected);
-      // Store in local storage for persistence
       localStorage.setItem("hasRejectedBookings", JSON.stringify(hasRejected));
     } catch (error) {
       console.error("Failed to fetch bookings:", error);
@@ -66,17 +62,18 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.setItem("username", "");
-    localStorage.removeItem("hasRejectedBookings"); // Clear rejected bookings on logout
-    setHasRejectedBookings(false); // Reset state
+    localStorage.removeItem("hasRejectedBookings");
+    setHasRejectedBookings(false);
     navigate("/login");
   };
 
   return (
+    <>
     <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#2c3e50" }}>
       <div className="container">
         <Link className="navbar-brand d-flex align-items-center" to="/" style={{ marginBottom: "10px" }}>
-          <img src={sportsLogo} alt="Sports Logo" style={{ height: "150px", float: "left", marginRight: "100px" }} />
-          <span style={{ color: "#fff", fontSize: "40px" }}>Indoor Sports</span>
+          <img src={sportsLogo} alt="Sports Logo" style={{ height: "50px", marginRight: "10px" }} />
+          <span style={{ color: "#fff", fontSize: "1.5rem" }}>Indoor Sports</span>
         </Link>
         <button
           className="navbar-toggler"
@@ -95,12 +92,7 @@ const Navbar = () => {
               <Link
                 className="nav-link"
                 to="/"
-                style={{
-                  color: "#fff",
-                  fontSize: "1.5rem",
-                  transition: "color 0.3s ease",
-                  marginRight: "20px",
-                }}
+                style={{ color: "#fff", fontSize: "1rem", transition: "color 0.3s ease", marginRight: "10px" }}
                 onMouseEnter={(e) => (e.target.style.color = "#f0f0f0")}
                 onMouseLeave={(e) => (e.target.style.color = "#fff")}
               >
@@ -111,13 +103,7 @@ const Navbar = () => {
               <Link
                 className="nav-link"
                 to="/ourclubs"
-                style={{
-                  color: "#fff",
-                  fontSize: "1.5rem",
-                  transition: "color 0.3s ease",
-                  marginLeft: "20px",
-                  marginRight: "20px",
-                }}
+                style={{ color: "#fff", fontSize: "1rem", transition: "color 0.3s ease", marginRight: "10px" }}
                 onMouseEnter={(e) => (e.target.style.color = "#f0f0f0")}
                 onMouseLeave={(e) => (e.target.style.color = "#fff")}
               >
@@ -128,13 +114,7 @@ const Navbar = () => {
               <Link
                 className="nav-link"
                 to="/events"
-                style={{
-                  color: "#fff",
-                  fontSize: "1.5rem",
-                  transition: "color 0.3s ease",
-                  marginLeft: "20px",
-                  marginRight: "20px",
-                }}
+                style={{ color: "#fff", fontSize: "1rem", transition: "color 0.3s ease", marginRight: "10px" }}
                 onMouseEnter={(e) => (e.target.style.color = "#f0f0f0")}
                 onMouseLeave={(e) => (e.target.style.color = "#fff")}
               >
@@ -145,13 +125,7 @@ const Navbar = () => {
               <Link
                 className="nav-link"
                 to="/shop"
-                style={{
-                  color: "#fff",
-                  fontSize: "1.5rem",
-                  transition: "color 0.3s ease",
-                  marginLeft: "20px",
-                  marginRight: "20px",
-                }}
+                style={{ color: "#fff", fontSize: "1rem", transition: "color 0.3s ease", marginRight: "10px" }}
                 onMouseEnter={(e) => (e.target.style.color = "#f0f0f0")}
                 onMouseLeave={(e) => (e.target.style.color = "#fff")}
               >
@@ -162,13 +136,7 @@ const Navbar = () => {
               <Link
                 className="nav-link"
                 to="/abooutus"
-                style={{
-                  color: "#fff",
-                  fontSize: "1.5rem",
-                  transition: "color 0.3s ease",
-                  marginLeft: "20px",
-                  marginRight: "20px",
-                }}
+                style={{ color: "#fff", fontSize: "1rem", transition: "color 0.3s ease", marginRight: "10px" }}
                 onMouseEnter={(e) => (e.target.style.color = "#f0f0f0")}
                 onMouseLeave={(e) => (e.target.style.color = "#fff")}
               >
@@ -179,13 +147,7 @@ const Navbar = () => {
               <Link
                 className="nav-link"
                 to="/contactus"
-                style={{
-                  color: "#fff",
-                  fontSize: "1.5rem",
-                  transition: "color 0.3s ease",
-                  marginLeft: "20px",
-                  marginRight: "20px",
-                }}
+                style={{ color: "#fff", fontSize: "1rem", transition: "color 0.3s ease", marginRight: "10px" }}
                 onMouseEnter={(e) => (e.target.style.color = "#f0f0f0")}
                 onMouseLeave={(e) => (e.target.style.color = "#fff")}
               >
@@ -199,30 +161,16 @@ const Navbar = () => {
                 <Link
                   className="nav-link position-relative"
                   to="/userbookings"
-                  style={{
-                    color: "#fff",
-                    fontSize: "1.5rem",
-                    transition: "color 0.3s ease",
-                    marginLeft: "20px",
-                    marginRight: "20px",
-                    position: "relative",
-                  }}
+                  style={{ color: "#fff", fontSize: "1rem", transition: "color 0.3s ease", marginRight: "10px" }}
                 >
                   Bookings
                   <span
                     className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
-                    style={{
-                      fontSize: "7px",
-                      marginLeft: "65px",
-                      marginTop: "10px",
-                      display: hasRejectedBookings ? "inline" : "none",
-                      transform: "translate(-50%, -50%)",
-                      color: "red",
-                    }}
+                    style={{ fontSize: "5px", marginLeft: "40px", marginTop: "10px", display: hasRejectedBookings ? "inline" : "none", transform: "translate(-50%, -50%)", color: "red" }}
                   >
                     .
                   </span>
-                  <img src={bell} style={{ width: "30px" }} alt="Bell Icon" />
+                  <img src={bell} style={{ width: "20px" }} alt="Bell Icon" />
                 </Link>
               </li>
             ) : null}
@@ -234,7 +182,7 @@ const Navbar = () => {
                     variant="light"
                     id="dropdown-basic"
                     className="mt-2"
-                    style={{ color: "#fff", fontSize: "1.5rem" }}
+                    style={{ color: "#fff", fontSize: "1rem" }}
                   >
                     {username}
                   </Dropdown.Toggle>
@@ -253,26 +201,20 @@ const Navbar = () => {
                 <Link
                   className="nav-link"
                   to="/signup"
-                  style={{
-                    color: "#fff",
-                    fontSize: "1.5rem",
-                    transition: "color 0.3s ease",
-                    marginLeft: "20px",
-                  }}
+                  style={{ color: "#fff", fontSize: "1rem", transition: "color 0.3s ease", marginRight: "10px" }}
                   onMouseEnter={(e) => (e.target.style.color = "#f0f0f0")}
                   onMouseLeave={(e) => (e.target.style.color = "#fff")}
                 >
                   Signup
                 </Link>
+              </li>
+            )}
+            {!username && (
+              <li className="nav-item">
                 <Link
                   className="nav-link"
                   to="/login"
-                  style={{
-                    color: "#fff",
-                    fontSize: "1.5rem",
-                    transition: "color 0.3s ease",
-                    marginLeft: "20px",
-                  }}
+                  style={{ color: "#fff", fontSize: "1rem", transition: "color 0.3s ease", marginRight: "10px" }}
                   onMouseEnter={(e) => (e.target.style.color = "#f0f0f0")}
                   onMouseLeave={(e) => (e.target.style.color = "#fff")}
                 >
@@ -284,6 +226,9 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
+   
+   
+    </>
   );
 };
 

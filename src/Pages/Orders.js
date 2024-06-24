@@ -2,8 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BiTrash } from "react-icons/bi";
 import DeleteOrder from "../components/models/Order/DeleteOrder";
-
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 const Orders = () => {
+  const [hasRejectedBookings, setHasRejectedBookings] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [showDOM, setShowDOM] = useState(false);
   const [orders, setOrders] = useState([]);
@@ -36,6 +38,7 @@ const Orders = () => {
   }, [refresh]);
   return (
     <div>
+     <Navbar hasRejectedBookings={hasRejectedBookings} />
       <DeleteOrder 
       show={showDOM}
       setShow={setShowDOM}
@@ -93,6 +96,7 @@ const Orders = () => {
           </tbody>
         </table>
       </div>
+      <Footer></Footer>
     </div>
   );
 };

@@ -13,11 +13,12 @@ const BookingEditModel = ({
   const [rejectReason, setRejectReason] = useState(""); // State to store the rejection reason
   const [showRejectMessage, setShowRejectMessage] = useState(false); // State to control rejection reason message visibility
   const [reasonError, setReasonError] = useState(false); // State to manage reason validation error
+  const [selectedReason, setSelectedReason] = useState(""); // State to manage selected rejection reason from dropdown
 
   const handleUpdateBooking = async () => {
     try {
       // Validate if reason is provided for rejection
-      if (status === "rejected" && rejectReason.trim() === "") {
+      if (status === "rejected" && (rejectReason.trim() === "" && selectedReason === "Other" || selectedReason === "")) {
         setReasonError(true);
         return;
       }
@@ -25,7 +26,7 @@ const BookingEditModel = ({
       const payload = {
         approved: status === "approved",
         rejected: status === "rejected",
-        rejectReason: status === "rejected" ? rejectReason : "", // Include reject reason if status is "rejected"
+        rejectReason: status === "rejected" ? (selectedReason === "Other" ? rejectReason : selectedReason) : "", // Include reject reason if status is "rejected"
       };
 
       await axios.put(`http://localhost:3001/bookings/${bookingId}`, payload);
@@ -34,6 +35,7 @@ const BookingEditModel = ({
       if (status === "rejected") {
         setShowRejectMessage(true); // Show rejection reason message after updating
         setRejectReason(""); // Clear reject reason input
+        setSelectedReason(""); // Clear selected reason input
       }
     } catch (err) {
       console.error("Failed to update booking:", err);
@@ -51,6 +53,8 @@ const BookingEditModel = ({
     // Reset reason error when changing status
     if (event.target.value !== "rejected") {
       setReasonError(false);
+      setSelectedReason("");
+      setRejectReason("");
     }
   };
 
@@ -59,6 +63,17 @@ const BookingEditModel = ({
     // Reset reason error when typing in reason input
     if (event.target.value.trim() !== "") {
       setReasonError(false);
+    }
+  };
+
+  const handleDropdownChange = (event) => {
+    setSelectedReason(event.target.value); // Update the selected reason from dropdown
+    // Reset reason error when selecting from dropdown
+    if (event.target.value !== "Other") {
+      setReasonError(false);
+      setRejectReason(""); // Clear the reject reason input if not "Other"
+    } else if (event.target.value === "Other") {
+      setRejectReason(""); // Ensure reject reason input is ready for new text if "Other" is selected
     }
   };
 
@@ -89,18 +104,23 @@ const BookingEditModel = ({
           {status === "rejected" && (
             <>
               <Form.Label>Select Reason for Rejection</Form.Label>
-              <textarea
-                className="form-control"
-                value={rejectReason}
-                onChange={handleRejectReasonChange}
-                rows={3} // Adjust the number of rows as needed
-              />
-              <select>
-              <option>Please choose any Reason</option>
-               <option>some one already booked manually</option>
-               <option>Clubs is under construction </option>
-               <option>Due To raning  </option>
+              <select className="form-control" onChange={handleDropdownChange} value={selectedReason}>
+                <option value="">Please choose a reason</option>
+                <option value="someoneBooked">Someone already booked manually</option>
+                <option value="underConstruction">Club is under construction</option>
+                <option value="Other">Other</option>
               </select>
+              {selectedReason === "Other" && (
+                <>
+                  <Form.Label>Specify Other Reason</Form.Label>
+                  <textarea
+                    className="form-control"
+                    value={rejectReason}
+                    onChange={handleRejectReasonChange}
+                    rows={3} // Adjust the number of rows as needed
+                  />
+                </>
+              )}
               {reasonError && (
                 <Alert variant="danger" className="mt-2">
                   Please provide a reason for rejection.
@@ -112,10 +132,10 @@ const BookingEditModel = ({
         <Button variant="success" onClick={handleUpdateBooking}>
           Edit Booking
         </Button>
-        {status === "rejected" && (
+        {showRejectMessage && status === "rejected" && (
           <Alert variant="info" className="mt-3">
             <Alert.Heading>Booking Rejected!</Alert.Heading>
-            <p>{rejectReason}</p>
+            <p>{selectedReason === "Other" ? rejectReason : selectedReason}</p>
           </Alert>
         )}
         {status === "approved" && (

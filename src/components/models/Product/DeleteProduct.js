@@ -14,26 +14,29 @@ function DeleteProduct({
 }) {
   const handleClose = () => setShow(false);
   const [error, setError] = useState("");
-  const [name, setName] = useState();
+  const [name, setName] = useState("");
   const [id, setId] = useState("");
-  const handleUpdateClub = async () => {
+
+  const handleDeleteProduct = async () => {
     try {
-      await axios.delete(`http://localhost:3001/club/${id}`);
+      await axios.delete(`http://localhost:3001/product/${id}`);
       setShow(false);
       setRefresh(!refresh);
     } catch (err) {
-      console.error("Failed to delete club:", err);
-      setError(err.response?.data.message);
+      console.error("Failed to delete product:", err);
+      setError(err.response?.data.message || "Failed to delete product");
     }
   };
+
   useEffect(() => {
     setName(previousName);
     setId(productId);
   }, [previousName, productId]);
+
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Delete Club</Modal.Title>
+        <Modal.Title>Delete Product</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -50,8 +53,8 @@ function DeleteProduct({
           </Alert>
         )}
         <p>Are you sure you want to delete {name}?</p>
-        <Button className="btn btn-danger" onClick={() => handleUpdateClub()}>
-          Delete Club
+        <Button className="btn btn-danger" onClick={handleDeleteProduct}>
+          Delete Product
         </Button>
       </Modal.Body>
     </Modal>

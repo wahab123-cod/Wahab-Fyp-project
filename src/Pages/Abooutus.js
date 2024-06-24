@@ -6,10 +6,15 @@ import p3 from '../images/Ld3.jpeg'
 import p4 from '../images/Ld4.jpeg'
 import p5 from '../images/Ld.jpeg'
 import p7 from '../images/Ld7.jpeg'
-
+import { useState } from 'react'
+import Navbar from './Navbar'
+import Footer from "./Footer";
 const Abooutus = () => {
+  const [hasRejectedBookings, setHasRejectedBookings] = useState(false);
   return (
     <div>
+     <Navbar hasRejectedBookings={hasRejectedBookings} />
+     <div className='container-fluid'>
       <div className='fa'>
         <h1 style={{ color: "red", cursor: "pointer", fontSize: "80px" }}> About </h1> <h1 style={{ fontSize: "80px" }}> Us</h1>
       </div>
@@ -113,6 +118,8 @@ const Abooutus = () => {
           </div>
         </div>
       </div>
+      </div>
+      <Footer />
     </div>
   )
 }

@@ -14,8 +14,10 @@ import bal2 from "../images/ball2.jpg";
 import safty from "../images/download.jpg";
 import "../Style/Ourclubs.css";
 import SlotList from "../components/slots/TimeSlots";
-
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 const Booking = () => {
+  const [hasRejectedBookings, setHasRejectedBookings] = useState(false);
   const { id } = useParams();
   const [clubs, setClubs] = useState([]);
   const [requiredIndex, setRequiredIndex] = useState();
@@ -163,37 +165,24 @@ const Booking = () => {
   }
 
   const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
   const [bookingMessage, setBookingMessage] = useState("");
   const [username, setUsername] = useState("");
   const [selectedDuration, setSelectedDuration] = useState(1);
-  const [price, setPrice] = useState(0);
 
-  const handleTimeSlotChange = (event) => {
-    setSelectedTimeSlot(event.target.value);
-  };
+
+
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
-  const handleDateChange = (event) => {
-    setSelectedDate(event.target.value);
-  };
-  const handleDurationChange = (event) => {
-    setSelectedDuration(parseInt(event.target.value));
-    setPrice(bookingInfo.price * parseInt(event.target.value));
-  };
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     const totalPrice = bookingInfo.price * selectedDuration;
-
+  
     try {
-    /*   if (!username.trim()) {
-        throw new Error("Username is required.");
-      } */
-
       const response = await axios.post("http://localhost:3001/book", {
         location: bookingInfo.location,
         date: selectedDate,
@@ -204,13 +193,13 @@ const Booking = () => {
         rejected: false,
         approved: false,
       });
-
-      setBookingMessage(response?.data.message);
-      alert("Booking successful!");
+  
+      setBookingMessage(response.data.message);
+      alert("Your request was sent successfully.");
     } catch (error) {
       if (error.response) {
         if (error.response.status === 400) {
-          alert(error.response?.data.message);
+          alert(error.response.data.message);
         } else if (error.response.status === 500) {
           alert("Internal server error. Please try again later.");
         }
@@ -219,9 +208,12 @@ const Booking = () => {
       }
     }
   };
+  
 
   return (
+    <div > <Navbar hasRejectedBookings={hasRejectedBookings} />
     <div className="container">
+      
       <div className="row">
         <div className="booking-page">
           <h1>Booking Details</h1>
@@ -354,6 +346,8 @@ const Booking = () => {
           </div>
         </div>
       </div>
+    </div>
+    <Footer />
     </div>
   );
 };

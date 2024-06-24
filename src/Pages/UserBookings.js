@@ -3,8 +3,11 @@ import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BiTrash } from 'react-icons/bi';
 import DeleteOrder from '../components/models/Order/DeleteOrder';
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const UserBookings = ({ setRejectedBookings }) => {
+  const [hasRejectedBookings, setHasRejectedBookings] = useState(false);
   const [bookings, setBookings] = useState([]);
   const username = localStorage.getItem("username");
   const [refresh, setRefresh] = useState(false);
@@ -15,7 +18,8 @@ const UserBookings = ({ setRejectedBookings }) => {
 
   useEffect(() => {
     fetchBookings();
-  }, []);
+    fetchOrders();
+  }, [refresh]);
 
   const fetchBookings = async () => {
     try {
@@ -37,12 +41,9 @@ const UserBookings = ({ setRejectedBookings }) => {
     }
   };
 
-  useEffect(() => {
-    fetchOrders();
-  }, [refresh]);
-
   return (
     <div>
+      <Navbar hasRejectedBookings={hasRejectedBookings} />
       <DeleteOrder
         show={showDOM}
         setShow={setShowDOM}
@@ -53,18 +54,18 @@ const UserBookings = ({ setRejectedBookings }) => {
       />
 
       <div className="contact-list m-5">
-        <div className=" m-3">
+        <div className="m-3">
           <h3>Order List</h3>
         </div>
         <table border="2">
           <thead>
             <tr>
-              <th>image</th>
+              <th>Image</th>
               <th>Name</th>
               <th>Price</th>
               <th>Quantity</th>
               <th>Total</th>
-              <th>buyerName</th>
+              <th>Buyer Name</th>
               <th>Address</th>
               <th>Action</th>
             </tr>
@@ -120,7 +121,7 @@ const UserBookings = ({ setRejectedBookings }) => {
             </tr>
           </thead>
           <tbody>
-            {bookings.map((booking, index) => (
+            {bookings?.map((booking, index) => (
               <tr key={index}>
                 {username === booking?.name && (
                   <>
@@ -153,9 +154,9 @@ const UserBookings = ({ setRejectedBookings }) => {
           </tbody>
         </table>
       </div>
+      <Footer />
     </div>
   );
 };
 
 export default UserBookings;
-

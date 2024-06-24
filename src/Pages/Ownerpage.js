@@ -10,6 +10,7 @@ import BookingEditModel from "../components/models/Booking/BookingEditModel";
 import AddEvent from "../components/models/Event/AddEvent";
 import EditEvent from "../components/models/Event/EditEvent";
 import DeleteEvent from "../components/models/Event/DeleteEvent";
+import Footer from "./Footer";
 
 const Ownerpage = () => {
   const [productId, setProductId] = useState("");
@@ -92,15 +93,10 @@ const Ownerpage = () => {
   };
   return (
     <>
-      {/* <div className="owner-container">
+      <div className="owner-container">
         <h2>Welcome</h2>
-        <label>Enter Club Name</label>
-        <input type="text" placeholder="Club Name" />
-        <label>Enter Phone No</label>
-        <input type="text" placeholder="Phone Number" />
-        <label>Enter Club Location</label>
-        <input type="text" placeholder="Club Location" />
-      </div> */}
+      
+      </div>
       <div className="m-5">
         <AddClub
           show={showAddModel}
@@ -347,6 +343,7 @@ const Ownerpage = () => {
           </table>
         </div>
       </div>
+    <Footer></Footer>
     </>
   );
 };

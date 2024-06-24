@@ -7,14 +7,18 @@ import crick3 from "../images/crik3.jpg";
 import crick4 from "../images/crick4.jpg";
 import { Link } from "react-router-dom";
 import Searchbar from "./Searchbar";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Col, FormControl, Row } from "react-bootstrap";
 const Ourclubs = () => {
+  const [hasRejectedBookings, setHasRejectedBookings] = useState(false);
   const [clubs, setClubs] = useState([]);
   const [filteredClubs, setFilteredClubs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [lowestPrice, setLowestPrice] = useState("");
+  
   useEffect(() => {
     fetchClubs();
   }, []);
@@ -49,7 +53,7 @@ const Ourclubs = () => {
   };
   return (
     <div className="">
-  
+  <Navbar hasRejectedBookings={hasRejectedBookings} />
       <div className="container">
         <div className="row">
           <h1 style={{ textAlign: "center", fontWeight: "bold" }}>
@@ -205,6 +209,7 @@ const Ourclubs = () => {
           </section>
         </div>
       </div>
+      <Footer></Footer>
     </div>
   );
 };

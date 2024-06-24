@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../Style/contactus.css';
-
+import Navbar from './Navbar';
+import Footer from "./Footer";
 const Contactus = () => {
+  const [hasRejectedBookings, setHasRejectedBookings] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [messag, setMsg] = useState('');
@@ -35,7 +37,7 @@ const Contactus = () => {
     axios.post('http://localhost:3001/contact', { name, email, messag , info })
       .then((response) => {
         alert("Message sent successfully!",response);
-        alert("hello")
+      
       })
       .catch((error) => {
         console.error('Failed to send message:', error);
@@ -45,6 +47,8 @@ const Contactus = () => {
 
   return (
     <div>
+       <Navbar hasRejectedBookings={hasRejectedBookings} />
+       <div className='container-fluid'>
       <div className='fc'>
         <h1 style={{ fontSize: "80px", color: "red" }}> Contact</h1> <h1 style={{ fontSize: "80px" }}> Us</h1>
       </div>
@@ -61,10 +65,7 @@ const Contactus = () => {
                 <input type="email" id="email" name="email" placeholder="Your email" onChange={handleEmailChange} value={email} required/>
                 <label htmlFor="message">Message:</label>
                 <textarea id="message" name="message" placeholder="Your message" onChange={handleMessageChange} value={messag} required></textarea>
-                <select onChange={handleinfo} value={info} >
-                <option>technical problems </option>
-               <option> slots already booked as manual</option>
-                </select>
+               
 
                 <button type="submit">Submit</button>
               </form>
@@ -76,6 +77,8 @@ const Contactus = () => {
           </div>
         </div>
       </div>
+      </div>
+      <Footer />
     </div>
   );
 }

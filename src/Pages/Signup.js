@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../Style/Registered.css';
 import { Link } from 'react-router-dom';
+import Navbar from './Navbar';
 const Register = () => {
+  const [hasRejectedBookings, setHasRejectedBookings] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -74,6 +76,9 @@ const Register = () => {
   };
 
   return (
+    <>
+      <Navbar hasRejectedBookings={hasRejectedBookings} />
+   
     <div className='body1'>
       <div className="container1">
         <div className="title">Registration</div>
@@ -138,6 +143,7 @@ const Register = () => {
         </div>
       </div>
     </div>
+    </>
   );
 }
 export default Register;

@@ -1,46 +1,138 @@
-.login-body3 {
-  display: grid;
+/* login.css */
+
+/* Container for login form */
+.login-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
-  place-items: center;
+  background-color: #f9f9f9;
 }
 
+/* Additional class for sports and ecommerce theme */
+.sports-ecommerce {
+  background-image: url("https://www.pngmart.com/files/23/Blue-Background-PNG-Pic.png"); /* Replace with your background image */
+  background-size: cover;
+  background-position: center;
+}
+
+/* Main login form wrapper */
 .login-main_div {
-  width: 365px;
-  background: #fff;
+  width: 100%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.9);
   padding: 30px;
-  border-radius: 5px;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
 }
 
-.login-form .login-input_box {
-  height: 50px;
-  width: 100%;
+/* Title styling with icon */
+.title {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.title .icon {
+  width: 30px;
+  height: auto;
+  margin-right: 10px;
+}
+
+/* Input box styling */
+.login-input_box {
   position: relative;
-  margin-top: 15px;
+  margin-bottom: 20px;
 }
 
 .login-input_box input {
-  height: 100%;
   width: 100%;
-  outline: none;
-  border: 1px solid lightgrey;
+  height: 50px;
+  padding: 0 20px;
+  font-size: 16px;
+  border: 1px solid #ddd;
   border-radius: 5px;
-  padding-left: 45px;
-  font-size: 17px;
-  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.8);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-.login-button input {
-  padding-left: 0;
-  background: #be2edd;
+.login-input_box input:focus {
+  outline: none;
+  border-color: #be2edd;
+  background-color: #fff;
+}
+
+/* Option div styling (Remember me and Forgot Password) */
+.option_div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.check_box {
+  display: flex;
+  align-items: center;
+}
+
+.check_box input {
+  margin-right: 10px;
+}
+
+.check_box label {
+  font-size: 14px;
+  color: #666;
+}
+
+.forgot_password a {
+  font-size: 14px;
+  color: #be2edd;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.forgot_password a:hover {
+  color: #a720c5;
+}
+
+/* Login button styling */
+.login-button {
+  text-align: center;
+}
+
+.login-button button {
+  width: 100%;
+  height: 50px;
+  background-color: #be2edd;
   color: #fff;
   border: none;
-  font-size: 20px;
-  font-weight: 500;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s linear;
+  transition: background-color 0.3s ease;
 }
 
-.login-button input:hover {
-  background: #a720c5;
+.login-button button:hover {
+  background-color: #a720c5;
+}
+
+/* Sign up text styling */
+.sign_up {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.sign_up a {
+  color: #be2edd;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.sign_up a:hover {
+  color: #a720c5;
 }

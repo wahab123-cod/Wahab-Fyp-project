@@ -30,7 +30,7 @@ const RejectBookingReason = ({ bookingId, onClose, refreshBookings }) => {
           value={rejectReason}
           onChange={(e) => setRejectReason(e.target.value)}
         />
-        <button onClick={submitRejectReason}>Submit Reason</button>
+        <button onClick={submitRejectReason}>Submit Reason </button>
       </div>
     </div>
   );

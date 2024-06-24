@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../Style/Profile.css";
 import { FaPencilAlt } from "react-icons/fa";
+import Navbar from "./Navbar";
 
 const Profile = () => {
+  const [hasRejectedBookings, setHasRejectedBookings] = useState(false);
   const [user, setUser] = useState({});
   const [newName, setNewName] = useState("");
   const [newEmail, setNewEmail] = useState("");
@@ -80,27 +82,26 @@ const Profile = () => {
         setError("Passwords do not match.");
         return;
       }
-  
+
       const response = await axios.put("http://localhost:3001/updatePassword", {
         id: user._id,
         oldPassword: oldPassword,
         newPassword: newPassword,
       });
-  
+
       // Handle success scenario as per your application's logic
       setNewPassword("");
       setOldPassword("");
       setConfirmPassword("");
       setEditingPassword(false);
-  
+
       // Optionally update user state or show success message
     } catch (error) {
       console.error("Error updating password:", error);
       setError("Failed to update password. Please try again.");
     }
   };
-  
-  
+
   const handleImageChange = (e) => {
     setImageFile(e.target.files[0]);
   };
@@ -137,135 +138,137 @@ const Profile = () => {
   }
 
   return (
-    <div className="profile-container">
-      <h2>User Profile</h2>
-      <div className="profile-info">
-        <div className="profile-image-container">
-          {user.profileImage ? (
-            <img
-              src={`http://localhost:3001/${user.profileImage}`}
-              alt="Profile"
-              className="profile-image"
-            />
-          ) : (
-            <p>No image uploaded</p>
-          )}
-          <br />
-          <label className="upload-button">
-            <input
-              type="file"
-              onChange={handleImageChange}
-              style={{ display: "none" }}
-            />
-            {uploading ? "Uploading..." : "Upload Image"}
-          </label>
-          <button
-            onClick={handleImageUpload}
-            disabled={!imageFile || uploading}
-            className="upload-button"
-          >
-            Upload
-          </button>
-        </div>
-        <div className="profile-details">
-          <div className="profile-item">
-            <div className="item-label">Name:</div>
-            {editingName ? (
-              <>
-                <input
-                  type="text"
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  className="name-input"
-                  placeholder="Enter new name"
-                />
-                <button onClick={handleEditName} className="save-button">
-                  Save
-                </button>
-              </>
+    <>
+      <Navbar hasRejectedBookings={hasRejectedBookings} />
+      <div className="profile-container">
+        <h2>User Profile</h2>
+        <div className="profile-info">
+          <div className="profile-image-container">
+            {user.profileImage ? (
+              <img
+                src={`http://localhost:3001/${user.profileImage}`}
+                alt="Profile"
+                className="profile-image"
+              />
             ) : (
-              <div className="item-value">
-                <span>{user.name}</span>
-                <button
-                  onClick={() => setEditingName(true)}
-                  className="edit-button"
-                >
-                  <FaPencilAlt /> Edit
-                </button>
-              </div>
+              <p>No image uploaded</p>
             )}
+            <br />
+            <label className="upload-button">
+              <input
+                type="file"
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+              />
+              {uploading ? "Uploading..." : "Select Image"}
+            </label>
+            <button
+              onClick={handleImageUpload}
+              disabled={!imageFile || uploading}
+              className="upload-button"
+            >
+              Upload
+            </button>
           </div>
-          <div className="profile-item">
-            <div className="item-label">Email:</div>
-            {editingEmail ? (
-              <>
-                <input
-                  type="email"
-                  value={newEmail}
-                  onChange={(e) => setNewEmail(e.target.value)}
-                  className="email-input"
-                  placeholder="Enter new email"
-                />
-                <button onClick={handleEditEmail} className="save-button">
-                  Save
-                </button>
-              </>
-            ) : (
-              <div className="item-value">
-                <span>{user.email}</span>
-                <button
-                  onClick={() => setEditingEmail(true)}
-                  className="edit-button"
-                >
-                  <FaPencilAlt /> Edit
-                </button>
-              </div>
-            )}
-          </div>
-          <div className="profile-item">
-            <div className="item-label">Password:</div>
-            {editingPassword ? (
-              <>
-                <input
-                  type="password"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                  className="password-input"
-                  placeholder="Enter old password"
-                />
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="password-input"
-                  placeholder="Enter new password"
-                />
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="password-input"
-                  placeholder="Confirm new password"
-                />
-                <button onClick={handleEditPassword} className="save-button">
-                  Save
-                </button>
-              </>
-            ) : (
-              <div className="item-value">
-                <span>*******</span>
-                <button
-                  onClick={() => setEditingPassword(true)}
-                  className="edit-button"
-                >
-                  <FaPencilAlt /> Edit
-                </button>
-              </div>
-            )}
+          <div className="profile-details">
+            <div className="profile-item">
+              <div className="item-label">Name:</div>
+              {editingName ? (
+                <>
+                  <input
+                    type="text"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    className="name-input"
+                    placeholder="Enter new name"
+                  />
+                  <button onClick={handleEditName} className="save-button">
+                    Save
+                  </button>
+                </>
+              ) : (
+                <div className="item-value">
+                  <span>{user.name}</span>
+                  <button
+                    onClick={() => setEditingName(true)}
+                    className="edit-button"
+                  >
+                    <FaPencilAlt /> Edit
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="profile-item">
+              <div className="item-label">Email:</div>
+              {editingEmail ? (
+                <>
+                  <input
+                    type="email"
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    className="email-input"
+                    placeholder="Enter new email"
+                  />
+                  <button onClick={handleEditEmail} className="save-button">
+                    Save
+                  </button>
+                </>
+              ) : (
+                <div className="item-value">
+                  <span>{user.email}</span>
+                  <button
+                    onClick={() => setEditingEmail(true)}
+                    className="edit-button"
+                  >
+                    <FaPencilAlt /> Edit
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="profile-item">
+              <div className="item-label">Password:</div>
+              {editingPassword ? (
+                <>
+                  <input
+                    type="password"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                    className="password-input"
+                    placeholder="Enter old password"
+                  />
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="password-input"
+                    placeholder="Enter new password"
+                  />
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="password-input"
+                    placeholder="Confirm new password"
+                  />
+                  <button onClick={handleEditPassword} className="save-button">
+                    Save
+                  </button>
+                </>
+              ) : (
+                <div className="item-value">
+                  <button
+                    onClick={() => setEditingPassword(true)}
+                    className="edit-button"
+                  >
+                    <FaPencilAlt /> Edit
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
