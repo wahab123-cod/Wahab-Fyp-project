@@ -8,7 +8,8 @@ const Contactus = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [messag, setMsg] = useState('');
-  const[info, setinfo] = useState('');
+  const [info, setinfo] = useState('');
+  const [msg, setmsg] = useState('');
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -33,11 +34,11 @@ const Contactus = () => {
   }
 
   const handleSubmit = (event) => {
-
+    event.preventDefault();
     axios.post('http://localhost:3001/contact', { name, email, messag , info })
       .then((response) => {
-        alert("Message sent successfully!",response);
-      
+        
+        setmsg("Your request ubmited successfully ")
       })
       .catch((error) => {
         console.error('Failed to send message:', error);
@@ -67,7 +68,8 @@ const Contactus = () => {
                 <textarea id="message" name="message" placeholder="Your message" onChange={handleMessageChange} value={messag} required></textarea>
                
 
-                <button type="submit">Submit</button>
+                  <button type="submit">Submit</button>
+                  <p> {msg}</p>
               </form>
               <div className="contact-info">
                 <p>Email: wahabzahid3945@gmail.com</p>
